@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home.jsx';
+import Home from './pages/Home.tsx';
 import MyWorkout from './pages/MyWorkout.tsx';
 import Navbar from './components/navbar.tsx';
 import './App.css';
-import Search from './pages/Search.jsx';
+import Search from './pages/Search.tsx';
+
+interface Exercise {
+  _id: string;
+  name: string;
+  type: string;
+  muscle: string;
+  difficulty: string;
+  instructions: string;
+}
 
 const App = () => {
-  const [workoutList, setWorkoutList] = useState([]);
+  const [workoutList, setWorkoutList] = useState<Exercise[]>([]);
 
-  const handleExerciseAdded = (newExercise) => {
+  const handleExerciseAdded = (newExercise: Exercise) => {
     setWorkoutList([...workoutList, newExercise]);
   };
 

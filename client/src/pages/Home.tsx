@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import '../App.css';
 import carousel1Img1 from '../images/carousel-1-img-1.jpg';
 import carousel2Img1 from '../images/carousel-2-img-1.jpg';
 import carousel3Img1 from '../images/carousel-3-img-1.jpg';
 
-const carouselsData = [
+interface CarouselData {
+  id: number;
+  imgSrc: string;
+  captionTitle: string;
+}
+
+const carouselsData: CarouselData[] = [
   {
     id: 1,
     imgSrc: carousel1Img1,
@@ -24,11 +29,11 @@ const carouselsData = [
 ];
 
 const quotes = [
-  "'Take care of your body. It's the only place you have to live.' – Jim Rohn",
-  "'If you don’t find the time, if you don’t do the work, you don’t get the results.' - Arnold Schwarzenegger",
-  "'The hardest lift of all is lifting your butt off the couch.' – Arnold Schwarzenegger",
-  "'Once you are exercising regularly, the hardest thing is to stop it.' – Erin Gray",
-  "'You miss one hundred percent of the shots you don’t take.' – Wayne Gretzky"
+  "'Take care of your body. It's the only place you have to live.' - Jim Rohn",
+  "'If you don't find the time, if you don't do the work, you don't get the results.' - Arnold Schwarzenegger",
+  "'The hardest lift of all is lifting your butt off the couch.' - Arnold Schwarzenegger",
+  "'Once you are exercising regularly, the hardest thing is to stop it.' - Erin Gray",
+  "'You miss one hundred percent of the shots you don't take.' - Wayne Gretzky"
 ];
 
 const getRandomQuote = () => {

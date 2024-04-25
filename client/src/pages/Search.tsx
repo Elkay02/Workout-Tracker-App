@@ -1,5 +1,5 @@
 import React from 'react';
-import ExerciseForm from '../components/ExerciseForm.jsx';
+import ExerciseForm from '../components/ExerciseForm.js';
 
 const Search = ({ onExerciseAdded }) => {
   return (

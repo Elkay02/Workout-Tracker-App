@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-const Timer = ({ seconds }: { seconds: number }) => {
+const Timer = ({ seconds, setIndex, setStart }: { seconds: number, setIndex: any, setStart: any }) => {
   const [remainingSeconds, setRemainingSeconds] = useState(seconds);
+
+  useEffect(() => {
+    if (remainingSeconds === 0) {
+      setIndex((prevIndex: number) => prevIndex + 1);
+      setStart(false)
+    }
+  }, [remainingSeconds, setIndex]);
 
   useEffect(() => {
 
