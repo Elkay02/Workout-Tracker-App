@@ -1,7 +1,7 @@
 import React from 'react';
 import ExerciseForm from '../components/ExerciseForm.jsx';
 
-const Workouts = ({ onExerciseAdded }) => {
+const Search = ({ onExerciseAdded }) => {
   return (
     <div className="section-header">
       <h1>Find Exercises</h1>
@@ -13,4 +13,4 @@ const Workouts = ({ onExerciseAdded }) => {
   );
 };
 
-export default Workouts;
+export default Search;

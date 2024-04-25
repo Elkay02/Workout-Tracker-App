@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Timer from './Timer.tsx';
 
-const WorkoutItem = ({ exercise, onExerciseDataChange, setWorkoutData }) => {
+const WorkoutItem = ({ exercise, setWorkoutData }) => {
   const [sets, setSets] = useState([]);
   const [currentSetIndex, setCurrentSetIndex] = useState(-1);
   const [timerStarted, setTimerStarted] = useState(false);
