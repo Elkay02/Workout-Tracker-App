@@ -2,19 +2,30 @@ import React, { useState } from 'react';
 import '../App.css';
 import { fetchExercises, addExercise } from '../services/exerciseService';
 
-const ExerciseForm = ({ onExerciseAdded }) => {
+interface Exercise {
+  _id: string;
+  name: string;
+  type: string;
+  muscle: string;
+  difficulty: string;
+  instructions: string;
+}
+
+interface Props {
+  onExerciseAdded: (exercise: Exercise) => void;
+}
+
+const ExerciseForm = ({ onExerciseAdded }: Props) => {
   const [formData, setFormData] = useState({
     muscle: '',
     type: '',
     difficulty: '',
-    exercises: [],
+    exercises: [] as Exercise[],
   });
-  const [error, setError] = useState(null);
-  const [exercises, setExercises] = useState([]);
-  const [workoutInProgress, setWorkoutInProgress] = useState(false);
-  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(-1);
+  const [error, setError] = useState<string | null>(null);
+  const [exercises, setExercises] = useState<Exercise[]>([]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const data = await fetchExercises(formData.muscle, formData.type, formData.difficulty);
@@ -26,12 +37,12 @@ const ExerciseForm = ({ onExerciseAdded }) => {
     }
   };
 
-  const handleAddExercise = async (exercise) => {
+  const handleAddExercise = async (exercise: Exercise) => {
     try {
       const updatedExercises = [...formData.exercises, { ...exercise, sets: [] }];
       setFormData({ ...formData, exercises: updatedExercises });
       const { data } = await addExercise(exercise);
-      console.log('received data', data)
+      console.log('received data', data);
       onExerciseAdded(data);
     } catch (error) {
       console.error('Error adding exercise:', error);
@@ -39,17 +50,17 @@ const ExerciseForm = ({ onExerciseAdded }) => {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
-  
-  
-  //i decided to enter them manually according to the api list
-  const muscleGroupOptions = ['Abdominals', 'Abductors', 'Adductors', 'Biceps', 'Calves', 'Chest', 'Forearms', 
-  'Glutes', 'Hamstrings', 'Lats', 'Lower_back', 'Middle_back', 'Neck', 'Quadriceps', 'Traps', 'Triceps'];
+
+
+  // Manually entered options according to the API list
+  const muscleGroupOptions = ['Abdominals', 'Abductors', 'Adductors', 'Biceps', 'Calves', 'Chest', 'Forearms',
+    'Glutes', 'Hamstrings', 'Lats', 'Lower_back', 'Middle_back', 'Neck', 'Quadriceps', 'Traps', 'Triceps'];
   const exerciseTypeOptions = ['Strength', 'Cardio', 'Powerlifting', 'Stretching'];
   const difficultyOptions = ['Beginner', 'Intermediate', 'Advanced'];
 
@@ -87,7 +98,7 @@ const ExerciseForm = ({ onExerciseAdded }) => {
               </select>
             </div>
             <div className="col-auto">
-            <button type="submit" className="btn btn-primary my-search-button">Search</button>
+              <button type="submit" className="btn btn-primary my-search-button">Search</button>
             </div>
           </form>
         </div>
@@ -98,7 +109,7 @@ const ExerciseForm = ({ onExerciseAdded }) => {
           <ul className="list-group">
             {exercises.map((exercise, index) => (
               <li key={index} className="list-group-item">
-                <h5 className="exercise-name">{exercise.name}</h5> {}
+                <h5 className="exercise-name">{exercise.name}</h5>
                 <p className="exercise-type">Type: {exercise.type}</p>
                 <p className="exercise-muscle">Muscle: {exercise.muscle}</p>
                 <p className="exercise-difficulty">Difficulty: {exercise.difficulty}</p>
@@ -108,7 +119,7 @@ const ExerciseForm = ({ onExerciseAdded }) => {
             ))}
           </ul>
         </div>
-      )}  
+      )}
     </div>
   );
 };

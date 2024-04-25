@@ -2,8 +2,21 @@ import React, { useState } from 'react';
 import WorkoutItem from './WorkoutItem';
 import '../App.css';
 
-const WorkoutList = ({ exercises }) => {
-  const [workoutData, setWorkoutData] = useState({});
+interface Exercise {
+  _id: string;
+  name: string;
+  type: string;
+  muscle: string;
+  difficulty: string;
+  instructions: string;
+}
+
+interface Props {
+  exercises: Exercise[];
+}
+
+const WorkoutList = ({ exercises }: Props) => {
+  const [workoutData, setWorkoutData] = useState<{ [key: string]: { weight: string; reps: string }[] }>({});
 
   const handleWorkoutDone = async () => {
     try {
@@ -28,17 +41,18 @@ const WorkoutList = ({ exercises }) => {
 
   return (
     <>
-      {exercises.map((exercise, index) => (
+      {exercises.map((exercise) => (
         <React.Fragment key={exercise._id}>
           <WorkoutItem key={exercise._id} exercise={exercise} setWorkoutData={setWorkoutData} />
           <hr className="my-4" style={{ borderColor: '#FFD700' }} />
         </React.Fragment>
       ))}
       <div className="d-grid gap-2">
-        <button onClick={handleWorkoutDone} className="btn btn-custom mt-2">Workout Done</button>
+        <button onClick={handleWorkoutDone} className="btn btn-custom mt-2">
+          Workout Done
+        </button>
       </div>
     </>
-
   );
 };
 

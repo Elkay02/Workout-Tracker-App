@@ -1,21 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import Timer from './Timer.tsx';
+import Timer from './Timer';
 
-const WorkoutItem = ({ exercise, setWorkoutData }) => {
-  const [sets, setSets] = useState([]);
-  const [currentSetIndex, setCurrentSetIndex] = useState(-1);
+interface Exercise {
+  _id: string;
+  name: string;
+  type: string;
+  muscle: string;
+  difficulty: string;
+  instructions: string;
+}
+
+interface Props {
+  exercise: Exercise;
+  setWorkoutData: React.Dispatch<React.SetStateAction<{ [key: string]: { weight: string; reps: string }[] }>>;
+}
+
+const WorkoutItem = ({ exercise, setWorkoutData }: Props) => {
+  const [sets, setSets] = useState<{ weight: string; reps: string }[]>([]);
   const [timerStarted, setTimerStarted] = useState(false);
   const [timerDuration, setTimerDuration] = useState(60);
-  const [liftHistory, setLiftHistory] = useState(null);
+  const [liftHistory, setLiftHistory] = useState<any>(null);
   const [showWorkoutHistory, setShowWorkoutHistory] = useState(false);
 
   useEffect(() => {
     if (exercise && sets.length) {
-      setWorkoutData((data) => {
-        const updatedData = { ...data };
-        updatedData[String(exercise._id)] = sets;
-        return updatedData;
-      });
+      setWorkoutData((data) => ({
+        ...data,
+        [String(exercise._id)]: sets,
+      }));
     }
   }, [exercise, sets, setWorkoutData]);
 
@@ -39,37 +51,22 @@ const WorkoutItem = ({ exercise, setWorkoutData }) => {
   const handleAddSet = () => {
     const newSet = { weight: '', reps: '' };
     setSets([...sets, newSet]);
-    setCurrentSetIndex(sets.length);
     setTimerStarted(false);
   };
 
-  const handleWeightChange = (index, value) => {
+  const handleInputChange = (index: number, key: string, value: string) => {
     const updatedSets = [...sets];
-    updatedSets[index].weight = value;
+    updatedSets[index][key] = value;
     setSets(updatedSets);
-    if (value !== '' && sets[index].reps !== '') {
+    if (value !== '' && sets[index].weight !== '' && sets[index].reps !== '') {
       setTimerStarted(true);
     }
   };
 
-  const handleRepsChange = (index, value) => {
-    const updatedSets = [...sets];
-    updatedSets[index].reps = value;
-    setSets(updatedSets);
-    if (value !== '' && sets[index].weight !== '') {
-      setTimerStarted(true);
-    }
-  };
-
-  const handleTimerDurationChange = (e) => {
+  const handleTimerDurationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setTimerDuration(parseInt(e.target.value));
     setTimerStarted(false);
   };
-
-  useEffect(() => {
-    //send exercise data back to workoutlist
-    setWorkoutData(prevData => ({ ...prevData, [exercise._id]: sets }));
-  }, [sets, exercise, setWorkoutData]);
 
   return (
     <div className="workout-item card card-custom mb-3">
@@ -86,18 +83,18 @@ const WorkoutItem = ({ exercise, setWorkoutData }) => {
               <input
                 type="text"
                 value={set.weight}
-                onChange={(e) => handleWeightChange(index, e.target.value)}
+                onChange={(e) => handleInputChange(index, 'weight', e.target.value)}
                 placeholder="Weight"
               />
               <input
                 type="text"
                 value={set.reps}
-                onChange={(e) => handleRepsChange(index, e.target.value)}
+                onChange={(e) => handleInputChange(index, 'reps', e.target.value)}
                 placeholder="Reps"
               />
-              {index === currentSetIndex && timerStarted && (
+              {timerStarted && (
                 <div style={{ textAlign: 'center' }}>
-                  <Timer seconds={timerDuration} onComplete={() => console.log('Timer completed')} />
+                  <Timer seconds={timerDuration} />
                   <select value={timerDuration} onChange={handleTimerDurationChange}>
                     <option value={60}>60 seconds</option>
                     <option value={90}>90 seconds</option>
@@ -107,15 +104,15 @@ const WorkoutItem = ({ exercise, setWorkoutData }) => {
             </div>
           ))}
           <div className="d-grid gap-2 mt-3">
-            <button className="btn btn-custom" onClick={handleAddSet}>Add Set</button>
-            {/* display lift history buttonif lift history is available */}
+            <button className="btn btn-custom" onClick={handleAddSet}>
+              Add Set
+            </button>
             {liftHistory && (
               <button className="btn btn-custom" onClick={() => setShowWorkoutHistory(!showWorkoutHistory)}>
                 {showWorkoutHistory ? 'Hide Lift History' : 'View Lift History'}
               </button>
             )}
           </div>
-          {/* display lift history details if available and showWorkoutHistory is true */}
           {liftHistory && showWorkoutHistory && (
             <div className="lift-history-details">
               <p>Last Lift:</p>
