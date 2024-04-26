@@ -1,6 +1,7 @@
 const BASE_URL = 'https://api.api-ninjas.com/v1';
 
-export const fetchExercises = async (muscle, type, difficulty) => {
+
+export const fetchExercises = async ({ muscle, type, difficulty }) => {
   const url = `${BASE_URL}/exercises?muscle=${muscle}&type=${type}&difficulty=${difficulty}`;
   const response = await fetch(url, {
     method: 'GET',
@@ -9,6 +10,7 @@ export const fetchExercises = async (muscle, type, difficulty) => {
     }
   });
   if (!response.ok) {
+    zzzz
     throw new Error('Failed to fetch exercises');
   }
   return response.json();

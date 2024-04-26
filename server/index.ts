@@ -15,7 +15,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(exerciseRouter);
 
-//connect to MongoDB and start server
 connectToDB()
   .then(() => {
     startServer(app, PORT);
