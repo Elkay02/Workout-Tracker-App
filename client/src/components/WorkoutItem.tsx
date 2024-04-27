@@ -29,15 +29,15 @@ interface Props {
 const WorkoutItem = ({ exercise, setWorkoutData }: Props) => {
 
   const [timerDuration, setTimerDuration] = useState<number>(60);
-  const [liftHistory, setLiftHistory] = useState<LiftHistory | null>(null);
   const [showWorkoutHistory, setShowWorkoutHistory] = useState(false);
-
+  
   const [sets, setSets] = useState<Set[]>([{ weight: '', reps: '' }]);
   console.log('WorkoutItem ~ sets:', sets);
   const [repeatedSet, setRepeatedSet] = useState({ sets: '', weight: '', reps: '' });
   console.log('WorkoutItem ~ repeatedSet:', repeatedSet);
-  const [startTime, setStartTime] = useState(false);
+  const [liftHistory, setLiftHistory] = useState<Set[] | null>(null);
   const [exercising, setExercising] = useState(false);
+  const [startTime, setStartTime] = useState(false);
   const [checkbox, setCheckbox] = useState(false);
   const [finished, setFinished] = useState(false);
   const [minutes, setMinutes] = useState(0);
@@ -120,105 +120,125 @@ const WorkoutItem = ({ exercise, setWorkoutData }: Props) => {
         <p className="card-text">Muscle: {exercise.muscle}</p>
         <p className="card-text">Difficulty: {exercise.difficulty}</p>
         <p className="card-text">Instructions: {exercise.instructions}</p>
-        {!exercising && <form className="set-tracking" onSubmit={handleSubmit}>
-          <div>
-            <h6>Set Break Time: </h6>
-            <input
-              type="number"
-              name='minutes'
-              placeholder='min'
-              min='0'
-              step='1'
-              max='59'
-              value={minutes}
-              onKeyDown={(e) => e.preventDefault()}
-              onChange={(e) => { setMinutes(parseInt(e.target.value)) }}
-            />
-            <label htmlFor="minutes">Min</label>
-            <input
-              type="number"
-              name='seconds'
-              placeholder='sec'
-              min='00'
-              step='05'
-              max='55'
-              value={seconds}
-              onKeyDown={(e) => e.preventDefault()}
-              onChange={(e) => { setSeconds(parseInt(e.target.value)) }}
-            />
-            <label htmlFor="seconds">Sec</label>
-          </div>
-          <div>
-            <h6>Repeat Same Set? </h6>
-            <input type="checkbox" onChange={(e) => { setCheckbox(e.target.checked) }} />
-          </div>
-
-          {checkbox &&
+        {!exercising && (
+          <form className="set-tracking" onSubmit={handleSubmit}>
             <div>
+              <h6>Set Break Time: </h6>
               <input
                 type="number"
-                name='sets'
-                placeholder='sets'
-                min='0'
-                step='1'
-                max='100'
+                name="minutes"
+                placeholder="min"
+                min="0"
+                step="1"
+                max="59"
+                value={minutes}
                 onKeyDown={(e) => e.preventDefault()}
-                onChange={(e) => setRepeatedSet({ ...repeatedSet, sets: e.target.value })}
-                required
+                onChange={(e) => {
+                  setMinutes(parseInt(e.target.value));
+                }}
               />
-              <label htmlFor="sets">Sets</label>
+              <label htmlFor="minutes">Min</label>
               <input
                 type="number"
-                name='weight'
-                placeholder='Kg'
-                min='0'
-                step='1'
+                name="seconds"
+                placeholder="sec"
+                min="00"
+                step="05"
+                max="55"
+                value={seconds}
                 onKeyDown={(e) => e.preventDefault()}
-                onChange={(e) => setRepeatedSet({ ...repeatedSet, weight: e.target.value })}
-                required
+                onChange={(e) => {
+                  setSeconds(parseInt(e.target.value));
+                }}
               />
-              <label htmlFor="weight">Kg</label>
-              <input
-                type="number"
-                name='reps'
-                placeholder='reps'
-                min='0'
-                step='1'
-                onKeyDown={(e) => e.preventDefault()}
-                onChange={(e) => setRepeatedSet({ ...repeatedSet, reps: e.target.value })}
-                required
-              />
-              <label htmlFor="reps">reps</label>
+              <label htmlFor="seconds">Sec</label>
             </div>
-          }
+            <div>
+              <h6>Repeat Same Set? </h6>
+              <input
+                type="checkbox"
+                onChange={(e) => {
+                  setCheckbox(e.target.checked);
+                }}
+              />
+            </div>
 
-          {(!checkbox) && (
-            sets.map((set, index) => (
-              <div key={index}>
-                <p>Set {index + 1}</p>
+            {checkbox && (
+              <div>
                 <input
-                  type="text"
-                  value={set.weight}
-                  onChange={(e) => handleInputChange(index, 'weight', e.target.value)}
-                  placeholder="Weight"
+                  type="number"
+                  name="sets"
+                  placeholder="sets"
+                  min="0"
+                  step="1"
+                  max="100"
+                  onKeyDown={(e) => e.preventDefault()}
+                  onChange={(e) =>
+                    setRepeatedSet({ ...repeatedSet, sets: e.target.value })
+                  }
                   required
                 />
+                <label htmlFor="sets">Sets</label>
                 <input
-                  type="text"
-                  value={set.reps}
-                  onChange={(e) => handleInputChange(index, 'reps', e.target.value)}
-                  placeholder="Reps"
+                  type="number"
+                  name="weight"
+                  placeholder="Kg"
+                  min="0"
+                  step="1"
+                  onKeyDown={(e) => e.preventDefault()}
+                  onChange={(e) =>
+                    setRepeatedSet({ ...repeatedSet, weight: e.target.value })
+                  }
                   required
                 />
-                <button className="btn btn-custom" onClick={handleAddSet}>Add Set</button>
+                <label htmlFor="weight">Kg</label>
+                <input
+                  type="number"
+                  name="reps"
+                  placeholder="reps"
+                  min="0"
+                  step="1"
+                  onKeyDown={(e) => e.preventDefault()}
+                  onChange={(e) =>
+                    setRepeatedSet({ ...repeatedSet, reps: e.target.value })
+                  }
+                  required
+                />
+                <label htmlFor="reps">reps</label>
               </div>
-            ))
-          )}
+            )}
 
-          <button type="submit">Start Exercise</button>
+            {!checkbox &&
+              sets.map((set, index) => (
+                <div key={index}>
+                  <p>Set {index + 1}</p>
+                  <input
+                    type="text"
+                    value={set.weight}
+                    onChange={(e) =>
+                      handleInputChange(index, "weight", e.target.value)
+                    }
+                    placeholder="Weight"
+                    required
+                  />
+                  <input
+                    type="text"
+                    value={set.reps}
+                    onChange={(e) =>
+                      handleInputChange(index, "reps", e.target.value)
+                    }
+                    placeholder="Reps"
+                    required
+                  />
+                  <button className="btn btn-custom" onClick={handleAddSet}>
+                    Add Set
+                  </button>
+                </div>
+              ))}
 
+            <button type="submit">Start Exercise</button>
 
-          {/* {sets.map((set, index) => (
+            {/* {sets.map((set, index) => (
             <div key={index}>
               <p>Set {index + 1}</p>
               <input
@@ -260,19 +280,38 @@ const WorkoutItem = ({ exercise, setWorkoutData }: Props) => {
               <p>Weight: {liftHistory.weight}</p>
             </div>
           )} */}
-
-        </form>}
-        {exercising && sets[myIndex] && <div>
-          <h6>Set {myIndex + 1}</h6>
-          <h6>Weight: {sets[myIndex].weight} Kg</h6>
-          <h6>Reps: {sets[myIndex].reps}</h6>
-          <button onClick={(e) => { setStartTime(true) }}>Finished Set</button>
-          {startTime && <Timer seconds={timerDuration} setIndex={setMyIndex} setStart={setStartTime} />}
-        </div>
-        }
-        {
-          finished && <h1>You're Done!!</h1>
-        }
+          </form>
+        )}
+        {exercising && sets[myIndex] && (
+          <div>
+            <h6>Set {myIndex + 1}</h6>
+            <h6>Weight: {sets[myIndex].weight} Kg</h6>
+            <h6>Reps: {sets[myIndex].reps}</h6>
+            <button
+              onClick={(e) => {
+                setStartTime(true);
+              }}
+            >
+              Finished Set
+            </button>
+            {startTime && (
+              <Timer
+                seconds={timerDuration}
+                setIndex={setMyIndex}
+                setStart={setStartTime}
+              />
+            )}
+          </div>
+        )}
+        {finished && (
+          <div>
+            <h1>You're Done!!</h1>
+            <h2>Lift History:</h2>
+            {liftHistory && liftHistory.map((set, index) => (
+                <p>Set: {index}, Weight: {set.weight}, Reps: {set.reps} </p>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

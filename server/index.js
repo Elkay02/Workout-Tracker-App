@@ -15,11 +15,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(exerciseRouter);
 
-connectToDB()
-  .then(() => {
-    startServer(app, PORT);
-  })
-  .catch(err => {
-    console.error('Error connecting to MongoDB:', err);
-    process.exit(1);
-  });
+if (require.main === module) {
+  connectToDB()
+    .then(() => {
+      app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
+    })
+    .catch(err => {
+      console.error('Error connecting to MongoDB:', err);
+      process.exit(1);
+    });
+}
+
+module.exports = app;
+

@@ -5,16 +5,28 @@ const exerciseSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    type: String,
-    muscle: String,
+    type: {
+        type: String,
+        required: true
+    },
+    muscle: {
+        type: String,
+        required: true
+    },
     equipment: String,
-    difficulty: String,
-    instructions: String,
+    difficulty: {
+        type: String,
+        required: true
+    },
+    instructions: {
+        type: String,
+        required: true
+    },
     workoutHistory: [
         {
-            sets: Number,
             reps: Number,
             weight: Number,
+            _id: false
         }
     ]
 });
