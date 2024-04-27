@@ -1,11 +1,16 @@
-import { Request, Response } from 'express';
-import Exercise from '../models/Exercise';  // Assuming default export of the model
+const Exercise = require('../models/Exercise');
 
-// Creating a new exercise
-export const createExercise = async (req: Request, res: Response): Promise<void> => {
+//creating a new exercise
+exports.createExercise = async (req, res) => {
     try {
         const { name, type, muscle, difficulty, instructions } = req.body;
-        const exercise = new Exercise({ name, type, muscle, difficulty, instructions });
+        const exercise = new Exercise({
+            name,
+            type,
+            muscle,
+            difficulty,
+            instructions
+        });
         await exercise.save();
         res.status(201).json({ success: true, data: exercise });
     } catch (err) {
@@ -14,8 +19,8 @@ export const createExercise = async (req: Request, res: Response): Promise<void>
     }
 };
 
-// Getting all exercises
-export const getExercises = async (req: Request, res: Response): Promise<void> => {
+//getting all exercises
+exports.getExercises = async (req, res) => {
     try {
         const exercises = await Exercise.find();
         res.status(200).json({ success: true, data: exercises });
@@ -25,13 +30,18 @@ export const getExercises = async (req: Request, res: Response): Promise<void> =
     }
 };
 
-// Updating an exercise by ID
-export const updateExercise = async (req: Request, res: Response): Promise<void> => {
+//updating an exercise by ID
+exports.updateExercise = async (req, res) => {
     try {
         const { name, sets, reps, restInterval } = req.body;
-        const exercise = await Exercise.findByIdAndUpdate(req.params.id, { name, sets, reps, restInterval }, { new: true });
+        const exercise = await Exercise.findByIdAndUpdate(req.params.id, {
+            name,
+            sets,
+            reps,
+            restInterval
+        }, { new: true });
         if (!exercise) {
-            res.status(404).json({ success: false, error: 'Exercise not found' });
+            return res.status(404).json({ success: false, error: 'Exercise not found' });
         }
         res.status(200).json({ success: true, data: exercise });
     } catch (err) {
@@ -40,12 +50,12 @@ export const updateExercise = async (req: Request, res: Response): Promise<void>
     }
 };
 
-// Deleting an exercise by ID
-export const deleteExercise = async (req: Request, res: Response): Promise<void> => {
+//deleting an exercise by ID
+exports.deleteExercise = async (req, res) => {
     try {
         const exercise = await Exercise.findByIdAndDelete(req.params.id);
         if (!exercise) {
-            res.status(404).json({ success: false, error: 'Exercise not found' });
+            return res.status(404).json({ success: false, error: 'Exercise not found' });
         }
         res.status(200).json({ success: true, data: {} });
     } catch (err) {
@@ -54,29 +64,24 @@ export const deleteExercise = async (req: Request, res: Response): Promise<void>
     }
 };
 
-interface Set {
-    sets: number;
-    reps: number;
-    weight: number;
-}
-
-interface WorkoutSets {
-    [key: string]: Set[];
-}
-
-// Workout is done and storing workout history
-export const markWorkoutDone = async (req: Request, res: Response): Promise<void> => {
+//workout is done and storing workout history
+exports.markWorkoutDone = async (req, res) => {
     try {
-        const body = req.body as WorkoutSets;
-        for (const [exerciseId, sets] of Object.entries(body)) {
+        console.log('Request Body:', req.body); 
+        for (const [exerciseId, sets] of Object.entries(req.body)) {
+            console.log('Exercise ID:', exerciseId);
+            console.log('Sets:', sets);
             const exercise = await Exercise.findById(exerciseId);
+            console.log('Exercise:', exercise);
             if (exercise) {
-                const formattedSets = sets.map((set: { sets: number, reps: number, weight: number }) => ({
+                const formattedSets = sets.map(set => ({
                     sets: set.sets,
                     reps: set.reps,
                     weight: set.weight
                 }));
+                console.log('Formatted Sets:', formattedSets);
                 exercise.workoutHistory.push(...formattedSets);
+                console.log('Updated Exercise:', exercise);
                 await exercise.save();
             }
         }
@@ -87,17 +92,16 @@ export const markWorkoutDone = async (req: Request, res: Response): Promise<void
     }
 };
 
-// Fetch last lift history for exercise by ID
-export const getExerciseLiftHistory = async (req: Request, res: Response): Promise<void> => {
+//fetch last lift history for exercise by ID
+exports.getExerciseLiftHistory = async (req, res) => {
     try {
         const exerciseId = req.params.id;
         const exercise = await Exercise.findById(exerciseId);
         if (!exercise) {
-            res.status(404).json({ success: false, error: 'Exercise not found' });
-        } else {
-            const liftHistory = exercise.workoutHistory.slice(-1)[0];
-            res.status(200).json({ success: true, data: liftHistory });
+            return res.status(404).json({ success: false, error: 'Exercise not found' });
         }
+        const liftHistory = exercise.workoutHistory.slice(-1)[0];
+        res.status(200).json({ success: true, data: liftHistory });
     } catch (error) {
         console.error('Error fetching lift history:', error);
         res.status(500).json({ success: false, error: 'Server error' });

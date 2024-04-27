@@ -1,6 +1,9 @@
-import express from 'express';
-import { Request, Response, NextFunction } from 'express';
-import * as exerciseController from './controllers/exerciseController';
+const express = require('express');
+// const Request = require('express');
+// const Response = require('express');
+// const NextFunction = require('express');
+const exerciseController = require('./controllers/exerciseController')
+
 
 const router = express.Router();
 
@@ -12,4 +15,4 @@ router.delete('/exercises/:id', exerciseController.deleteExercise);
 router.post('/exercises/workoutDone', exerciseController.markWorkoutDone);
 router.get('/exercises/:id/lift-history', exerciseController.getExerciseLiftHistory);
 
-export default router;
+module.exports = router;
