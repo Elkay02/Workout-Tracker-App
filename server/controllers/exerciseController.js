@@ -33,12 +33,10 @@ exports.getExercises = async (req, res) => {
 //updating an exercise by ID
 exports.updateExercise = async (req, res) => {
     try {
-        const { name, sets, reps, restInterval } = req.body;
+        const { breakTime, workoutHistory } = req.body;
         const exercise = await Exercise.findByIdAndUpdate(req.params.id, {
-            name,
-            sets,
-            reps,
-            restInterval
+            breakTime,
+            workoutHistory
         }, { new: true });
         if (!exercise) {
             return res.status(404).json({ success: false, error: 'Exercise not found' });

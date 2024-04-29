@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../App.css';
 import { fetchExercises, addExercise } from '../services/exerciseService';
+import { Link } from 'react-router-dom';
 
 interface Exercise {
   _id: string;
@@ -101,6 +102,7 @@ const ExerciseForm = ({ onExerciseAdded }: Props) => {
               <button type="submit" className="btn btn-primary my-search-button">Search</button>
             </div>
           </form>
+          <Link className="btn btn-primary my-search-button" to='/newWorkout'>Go to Workout</Link>
         </div>
       </div>
       {exercises.length > 0 && (

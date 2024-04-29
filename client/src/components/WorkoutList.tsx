@@ -9,23 +9,34 @@ interface Exercise {
   muscle: string;
   difficulty: string;
   instructions: string;
+  breakTime: number;
+  workoutHistory: Set[];
+}
+
+interface Set {
+  weight: string;
+  reps: string;
 }
 
 interface Props {
   exercises: Exercise[];
+  isOld: Boolean;
 }
 
-const WorkoutList = ({ exercises }: Props) => {
-  const [workoutData, setWorkoutData] = useState<{ [key: string]: { weight: string; reps: string }[] }>({});
+const WorkoutList = ({ exercises, isOld }: Props) => {
 
   const handleWorkoutDone = async () => {
+    const exercisesIds = exercises.map(ex => ex._id)
     try {
-      const response = await fetch('http://localhost:3000/exercises/workoutDone', {
+      const response = await fetch('http://localhost:3000/workout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(workoutData)
+        body: JSON.stringify({
+          name: "test 1",
+          exercises: exercisesIds
+        })
       });
 
       if (!response.ok) {
@@ -33,7 +44,6 @@ const WorkoutList = ({ exercises }: Props) => {
       }
 
       const data = await response.json();
-      console.log(data);
     } catch (error) {
       console.error('Error marking workout as done:', error);
     }
@@ -43,7 +53,7 @@ const WorkoutList = ({ exercises }: Props) => {
     <>
       {exercises.map((exercise) => (
         <React.Fragment key={exercise._id}>
-          <WorkoutItem key={exercise._id} exercise={exercise} setWorkoutData={setWorkoutData} />
+          <WorkoutItem key={exercise._id} exercise={exercise} isOld={isOld} />
           <hr className="my-4" style={{ borderColor: '#FFD700' }} />
         </React.Fragment>
       ))}

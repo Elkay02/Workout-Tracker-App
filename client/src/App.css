@@ -4,7 +4,21 @@ body {
   font-family: 'Arial', sans-serif;
   background-color: #121212;
   color: #ffffff;
+  position: relative;
+  /* Add position relative */
+}
+
+body::after {
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
   background-image: url('./images/pexels-victorfreitas-841130.jpg');
+  filter: brightness(25%);
+  z-index: -1;
+  /* Push the pseudo-element behind the content */
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -14,8 +28,8 @@ body {
   width: 250px;
   background-color: #1f1f1f;
   height: 100vh;
-  position: fixed; 
-  overflow-y: auto; 
+  position: fixed;
+  overflow-y: auto;
 }
 
 .main-content {
@@ -119,6 +133,7 @@ html body .btn.my-add-exercise-button:hover {
   font-size: 16px;
   margin-top: 0.5rem;
 }
+
 .found-exercises .exercise-type,
 .found-exercises .exercise-muscle,
 .found-exercises .exercise-difficulty {

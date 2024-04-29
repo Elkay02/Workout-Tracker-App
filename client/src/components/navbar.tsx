@@ -10,21 +10,13 @@ const Navbar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/search">Find Exercises</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/myworkout">Workout List</Link>
-            </li>
-          </ul>
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <Link className="nav-link" to="/profile">
-                <i className="fas fa-user-circle"></i> My Profile
+          <div className="navbar-nav mr-auto">
+            <div className="nav-item">
+              <Link className="nav-link" to="/workouts">
+                <i className="fas fa-user-circle"></i> Workouts
               </Link>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
       </div>
     </nav>

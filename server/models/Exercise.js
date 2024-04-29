@@ -22,6 +22,9 @@ const exerciseSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    breakTime: {
+        type: Number,
+    },
     workoutHistory: [
         {
             reps: Number,
