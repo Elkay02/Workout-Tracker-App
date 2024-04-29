@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import WorkoutItem from './WorkoutItem';
+import WorkoutItem from './DisplayWorkoutItem';
 import '../App.css';
+import { useNavigate } from 'react-router-dom';
+import DislpayWorkoutItem from './DisplayWorkoutItem';
+import CreateWorkoutItem from './CreateWorkoutItem';
 
 interface Exercise {
   _id: string;
@@ -25,43 +28,58 @@ interface Props {
 
 const WorkoutList = ({ exercises, isOld }: Props) => {
 
+  const navigate = useNavigate();
+  const [workoutName, setWorkoutName] = useState('')
+  const [saves, setSaves] = useState(0)
+
   const handleWorkoutDone = async () => {
     const exercisesIds = exercises.map(ex => ex._id)
-    try {
-      const response = await fetch('http://localhost:3000/workout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: "test 1",
-          exercises: exercisesIds
-        })
-      });
+    if (workoutName === '') {
+      alert('Please name your workout!')
+    } else {
+      try {
+        const response = await fetch('http://localhost:3000/workout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: workoutName,
+            exercises: exercisesIds
+          })
+        });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        navigate(`/workoutLib`);
+      } catch (error) {
+        console.error('Error marking workout as done:', error);
       }
-
-      const data = await response.json();
-    } catch (error) {
-      console.error('Error marking workout as done:', error);
     }
   };
 
   return (
     <>
+      {!isOld && <input
+        type="text"
+        placeholder='Name your Workout'
+        value={workoutName}
+        onChange={(e) => { setWorkoutName(e.target.value) }}
+        required
+      />}
       {exercises.map((exercise) => (
         <React.Fragment key={exercise._id}>
-          <WorkoutItem key={exercise._id} exercise={exercise} isOld={isOld} />
+          {isOld ? <DislpayWorkoutItem key={exercise._id} exercise={exercise} /> : <CreateWorkoutItem key={exercise._id} exercise={exercise} />}
           <hr className="my-4" style={{ borderColor: '#FFD700' }} />
         </React.Fragment>
       ))}
-      <div className="d-grid gap-2">
-        <button onClick={handleWorkoutDone} className="btn btn-custom mt-2">
-          Workout Done
+      {!isOld && <div className="d-grid gap-2">
+        <button onClick={handleWorkoutDone} className="btn mt-2">
+          Submit Workout
         </button>
-      </div>
+      </div>}
     </>
   );
 };

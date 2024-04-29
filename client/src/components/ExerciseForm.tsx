@@ -23,8 +23,10 @@ const ExerciseForm = ({ onExerciseAdded }: Props) => {
     difficulty: '',
     exercises: [] as Exercise[],
   });
+
   const [error, setError] = useState<string | null>(null);
   const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [isEmpty, setIsEmpty] = useState(true);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,6 +45,7 @@ const ExerciseForm = ({ onExerciseAdded }: Props) => {
       const updatedExercises = [...formData.exercises, { ...exercise, sets: [] }];
       setFormData({ ...formData, exercises: updatedExercises });
       const { data } = await addExercise(exercise);
+      setIsEmpty(false);
       console.log('received data', data);
       onExerciseAdded(data);
     } catch (error) {
@@ -102,7 +105,7 @@ const ExerciseForm = ({ onExerciseAdded }: Props) => {
               <button type="submit" className="btn btn-primary my-search-button">Search</button>
             </div>
           </form>
-          <Link className="btn btn-primary my-search-button" to='/createWorkout'>Go to Workout</Link>
+          {!isEmpty && <Link className="btn btn-primary my-search-button" to='/createWorkout'>Go to Workout</Link>}
         </div>
       </div>
       {exercises.length > 0 && (

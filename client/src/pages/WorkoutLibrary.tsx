@@ -38,7 +38,7 @@ const WorkoutLib = () => {
         </Link>
       </div>
       <div className="row">
-        <h1>Old Workouts</h1>
+        <h1>Your Workouts</h1>
         {workouts.map((workout: any) => (
           <div className="col-md-3 mb-4" key={workout._id}> {/* 4-column grid for medium devices */}
             <div className="card">

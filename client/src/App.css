@@ -12,8 +12,8 @@ body::after {
   content: "";
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   position: absolute;
   background-image: url('./images/pexels-victorfreitas-841130.jpg');
   filter: brightness(25%);

@@ -6,7 +6,7 @@ const CreateWorkout = ({ exercises }) => {
 
   return (
     <div className="section-header">
-      <h2 className="text-center">Workout List</h2>
+      <h2 className="text-center">Create Your Workout</h2>
       {exercises.length > 0 ? (
         <WorkoutList exercises={exercises} isOld={false} />
       ) : (
