@@ -25,7 +25,7 @@ const WorkoutLib = () => {
   }, []);
 
   const handleWorkoutClick = (id: string) => {
-    navigate(`/oldWorkout/${id}`);
+    navigate(`/workout/${id}`);
   };
 
   return (

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../App.css';
 import WorkoutList from '../components/WorkoutList';
 
-const NewWorkout = ({ exercises }) => {
+const CreateWorkout = ({ exercises }) => {
 
   return (
     <div className="section-header">
@@ -18,4 +18,4 @@ const NewWorkout = ({ exercises }) => {
   );
 };
 
-export default NewWorkout;
+export default CreateWorkout;

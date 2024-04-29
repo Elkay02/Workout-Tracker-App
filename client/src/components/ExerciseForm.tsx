@@ -102,7 +102,7 @@ const ExerciseForm = ({ onExerciseAdded }: Props) => {
               <button type="submit" className="btn btn-primary my-search-button">Search</button>
             </div>
           </form>
-          <Link className="btn btn-primary my-search-button" to='/newWorkout'>Go to Workout</Link>
+          <Link className="btn btn-primary my-search-button" to='/createWorkout'>Go to Workout</Link>
         </div>
       </div>
       {exercises.length > 0 && (

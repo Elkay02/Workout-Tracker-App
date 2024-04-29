@@ -16,8 +16,6 @@ const OldWorkout = () => {
           throw new Error('Failed to fetch exercises');
         }
         const data = await response.json();
-        console.log('fetchExercises ~ data:', data);
-        console.log('fetchExercises ~ data.data.exercises:', data.data.exercises);
         setExercises(data.data.exercises);
       } catch (error) {
         console.error('Error fetching exercises:', error);
@@ -29,7 +27,7 @@ const OldWorkout = () => {
 
   return (
     <div className="section-header">
-      <h2 className="text-center">Workout List</h2>
+      <h2 className="text-center">Let's Workout!</h2>
       <WorkoutList exercises={exercises} isOld={true} />
     </div>
   );
