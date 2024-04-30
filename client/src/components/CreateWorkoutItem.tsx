@@ -104,7 +104,7 @@ const CreateWorkoutItem = ({ exercise }: Props) => {
                 onKeyDown={(e) => e.preventDefault()}
                 onChange={(e) => {
                   setMinutes(parseInt(e.target.value));
-                }} /><label htmlFor="minutes">Min</label><input
+                }} className='workout-input-spaces'/><label htmlFor="minutes">Min</label><input
                 type="number"
                 name="seconds"
                 placeholder="sec"
@@ -115,7 +115,7 @@ const CreateWorkoutItem = ({ exercise }: Props) => {
                 onKeyDown={(e) => e.preventDefault()}
                 onChange={(e) => {
                   setSeconds(parseInt(e.target.value));
-                }} /><label htmlFor="seconds">Sec</label>
+                }} className='workout-input-spaces'/><label htmlFor="seconds">Sec</label>
 
             </div>
 
@@ -196,8 +196,9 @@ const CreateWorkoutItem = ({ exercise }: Props) => {
                     }
                     placeholder="Reps"
                     required
+                    className='workout-input-spaces'
                   />
-                  <button className="btn btn-custom" onClick={handleAddSet}>
+                  <button className="btn btn-custom" onClick={handleAddSet} >
                     Add Set
                   </button>
                 </div>

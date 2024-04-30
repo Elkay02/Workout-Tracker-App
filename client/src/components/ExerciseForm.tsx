@@ -23,10 +23,9 @@ const ExerciseForm = ({ onExerciseAdded }: Props) => {
     difficulty: '',
     exercises: [] as Exercise[],
   });
-
   const [error, setError] = useState<string | null>(null);
   const [exercises, setExercises] = useState<Exercise[]>([]);
-  const [isEmpty, setIsEmpty] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,9 +44,10 @@ const ExerciseForm = ({ onExerciseAdded }: Props) => {
       const updatedExercises = [...formData.exercises, { ...exercise, sets: [] }];
       setFormData({ ...formData, exercises: updatedExercises });
       const { data } = await addExercise(exercise);
-      setIsEmpty(false);
       console.log('received data', data);
       onExerciseAdded(data);
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 2000);
     } catch (error) {
       console.error('Error adding exercise:', error);
       setError('Failed to add exercise. Please try again.');
@@ -73,6 +73,11 @@ const ExerciseForm = ({ onExerciseAdded }: Props) => {
       <div className="card mt-4">
         <div className="card-body">
           {error && <p className="error-message">{error}</p>}
+          {showAlert && (
+            <div className="alert-overlay">
+              <div className="alert-box alert alert-success">Exercise added successfully!</div>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="row g-3 align-items-center centered-form">
             <div className="col-auto">
               <label htmlFor="muscle" className="visually-hidden">Muscle Group</label>
@@ -105,7 +110,8 @@ const ExerciseForm = ({ onExerciseAdded }: Props) => {
               <button type="submit" className="btn btn-primary my-search-button">Search</button>
             </div>
           </form>
-          {!isEmpty && <Link className="btn btn-primary my-search-button" to='/createWorkout'>Go to Workout</Link>}
+          <br />
+          <Link className="btn btn-primary my-search-button" to='/createWorkout'>Go to Workout</Link>
         </div>
       </div>
       {exercises.length > 0 && (

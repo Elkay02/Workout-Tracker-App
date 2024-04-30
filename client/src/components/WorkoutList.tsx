@@ -68,7 +68,7 @@ const WorkoutList = ({ exercises, isOld }: Props) => {
         value={workoutName}
         onChange={(e) => { setWorkoutName(e.target.value) }}
         required
-      />}
+        className="my-4"/>}
       {exercises.map((exercise) => (
         <React.Fragment key={exercise._id}>
           {isOld ? <DislpayWorkoutItem key={exercise._id} exercise={exercise} /> : <CreateWorkoutItem key={exercise._id} exercise={exercise} />}
