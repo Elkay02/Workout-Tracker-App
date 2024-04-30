@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import WorkoutItem from './DisplayWorkoutItem';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
 import DislpayWorkoutItem from './DisplayWorkoutItem';
 import CreateWorkoutItem from './CreateWorkoutItem';
+import { useWorkoutContext } from '../App';
 
 interface Exercise {
   _id: string;
@@ -29,13 +29,17 @@ interface Props {
 const WorkoutList = ({ exercises, isOld }: Props) => {
 
   const navigate = useNavigate();
+  const { setWorkoutList } = useWorkoutContext()
+
   const [workoutName, setWorkoutName] = useState('')
-  const [saves, setSaves] = useState(0)
+  const [saveCount, setSaveCount] = useState(0)
 
   const handleWorkoutDone = async () => {
     const exercisesIds = exercises.map(ex => ex._id)
     if (workoutName === '') {
       alert('Please name your workout!')
+    } else if (saveCount < exercises.length) {
+      alert('Please save all the information before submitting!')
     } else {
       try {
         const response = await fetch('http://localhost:3000/workout', {
@@ -52,12 +56,16 @@ const WorkoutList = ({ exercises, isOld }: Props) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
-
+        setWorkoutList([])
         navigate(`/workoutLib`);
       } catch (error) {
         console.error('Error marking workout as done:', error);
       }
     }
+  };
+
+  const incrementSaveCount = () => {
+    setSaveCount(saveCount + 1);
   };
 
   return (
@@ -68,10 +76,11 @@ const WorkoutList = ({ exercises, isOld }: Props) => {
         value={workoutName}
         onChange={(e) => { setWorkoutName(e.target.value) }}
         required
+        className="my-4"
       />}
       {exercises.map((exercise) => (
         <React.Fragment key={exercise._id}>
-          {isOld ? <DislpayWorkoutItem key={exercise._id} exercise={exercise} /> : <CreateWorkoutItem key={exercise._id} exercise={exercise} />}
+          {isOld ? <DislpayWorkoutItem key={exercise._id} exercise={exercise} /> : <CreateWorkoutItem key={exercise._id} exercise={exercise} SaveInc={incrementSaveCount} />}
           <hr className="my-4" style={{ borderColor: '#FFD700' }} />
         </React.Fragment>
       ))}

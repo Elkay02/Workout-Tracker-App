@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home.tsx';
 import Navbar from './components/navbar.tsx';
@@ -17,32 +17,49 @@ interface Exercise {
   instructions: string;
 }
 
+interface WorkoutContextType {
+  workoutList: Exercise[];
+  handleExerciseAdded: (newExercise: Exercise) => void;
+  setWorkoutList: React.Dispatch<React.SetStateAction<Exercise[]>>;
+}
+
+const WorkoutContext = createContext<WorkoutContextType>({
+  workoutList: [],
+  handleExerciseAdded: () => { },
+  setWorkoutList: () => { }
+});
+
 const App = () => {
   const [workoutList, setWorkoutList] = useState<Exercise[]>([]);
+  console.log('App ~ workoutList:', workoutList);
 
   const handleExerciseAdded = (newExercise: Exercise) => {
     setWorkoutList([...workoutList, newExercise]);
   };
 
   return (
-    <Router>
-      <div>
-        {/* My navigation bar */}
-        <Navbar />
+    <WorkoutContext.Provider value={{ workoutList, handleExerciseAdded, setWorkoutList }}>
+      <Router>
+        <div>
+          {/* My navigation bar */}
+          <Navbar />
 
-        {/* My main content */}
-        <div className="container main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/search" element={<Search onExerciseAdded={handleExerciseAdded} />} />
-            <Route path="/createWorkout" element={<CreateWorkout exercises={workoutList} />} />
-            <Route path="/workout/:id" element={<OldWorkout />} />
-            <Route path="/workoutLib" element={<WorkoutLib />} />
-          </Routes>
+          {/* My main content */}
+          <div className="container main-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/createWorkout" element={<CreateWorkout exercises={workoutList} />} />
+              <Route path="/workout/:id" element={<OldWorkout />} />
+              <Route path="/workoutLib" element={<WorkoutLib />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </WorkoutContext.Provider>
   );
 };
 
-export default App
+const useWorkoutContext = () => useContext(WorkoutContext);
+
+export { useWorkoutContext, App as default };

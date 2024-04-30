@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../App.css';
 import { fetchExercises, addExercise } from '../services/exerciseService';
 import { Link } from 'react-router-dom';
+import { useWorkoutContext } from '../App';
 
 interface Exercise {
   _id: string;
@@ -12,11 +13,9 @@ interface Exercise {
   instructions: string;
 }
 
-interface Props {
-  onExerciseAdded: (exercise: Exercise) => void;
-}
+const ExerciseForm = () => {
 
-const ExerciseForm = ({ onExerciseAdded }: Props) => {
+  const { handleExerciseAdded } = useWorkoutContext();
   const [formData, setFormData] = useState({
     muscle: '',
     type: '',
@@ -27,6 +26,7 @@ const ExerciseForm = ({ onExerciseAdded }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [isEmpty, setIsEmpty] = useState(true);
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,8 +46,10 @@ const ExerciseForm = ({ onExerciseAdded }: Props) => {
       setFormData({ ...formData, exercises: updatedExercises });
       const { data } = await addExercise(exercise);
       setIsEmpty(false);
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 2000);
       console.log('received data', data);
-      onExerciseAdded(data);
+      handleExerciseAdded(data);
     } catch (error) {
       console.error('Error adding exercise:', error);
       setError('Failed to add exercise. Please try again.');

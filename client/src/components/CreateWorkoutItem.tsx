@@ -19,9 +19,10 @@ interface Set {
 
 interface Props {
   exercise: Exercise;
+  SaveInc: () => void
 }
 
-const CreateWorkoutItem = ({ exercise }: Props) => {
+const CreateWorkoutItem = ({ exercise, SaveInc }: Props) => {
 
 
   const [sets, setSets] = useState<Set[]>([{ weight: '', reps: '' }]);
@@ -76,6 +77,7 @@ const CreateWorkoutItem = ({ exercise }: Props) => {
 
         }
       }
+      SaveInc()
       setSaved(true)
       updateHistory(breaktime);
     }
@@ -104,7 +106,11 @@ const CreateWorkoutItem = ({ exercise }: Props) => {
                 onKeyDown={(e) => e.preventDefault()}
                 onChange={(e) => {
                   setMinutes(parseInt(e.target.value));
-                }} /><label htmlFor="minutes">Min</label><input
+                }}
+                className='workout-input-spaces'
+              />
+              <label htmlFor="minutes">Min</label>
+              <input
                 type="number"
                 name="seconds"
                 placeholder="sec"
@@ -115,7 +121,10 @@ const CreateWorkoutItem = ({ exercise }: Props) => {
                 onKeyDown={(e) => e.preventDefault()}
                 onChange={(e) => {
                   setSeconds(parseInt(e.target.value));
-                }} /><label htmlFor="seconds">Sec</label>
+                }}
+                className='workout-input-spaces'
+              />
+              <label htmlFor="seconds">Sec</label>
 
             </div>
 
@@ -196,6 +205,7 @@ const CreateWorkoutItem = ({ exercise }: Props) => {
                     }
                     placeholder="Reps"
                     required
+                    className='workout-input-spaces'
                   />
                   <button className="btn btn-custom" onClick={handleAddSet}>
                     Add Set
@@ -210,8 +220,7 @@ const CreateWorkoutItem = ({ exercise }: Props) => {
 
         {saved && (
           <div>
-            <h1>You're Done!!</h1>
-            <h2>Lift History:</h2>
+            <h1>Summary:</h1>
             {sets && sets.map((set, index) => (
               <p>Set: {index + 1}, Weight: {set.weight}, Reps: {set.reps} </p>
             ))}
