@@ -22,7 +22,6 @@ const ExerciseForm = () => {
     difficulty: '',
     exercises: [] as Exercise[],
   });
-
   const [error, setError] = useState<string | null>(null);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [isEmpty, setIsEmpty] = useState(true);

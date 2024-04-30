@@ -207,7 +207,7 @@ const CreateWorkoutItem = ({ exercise, SaveInc }: Props) => {
                     required
                     className='workout-input-spaces'
                   />
-                  <button className="btn btn-custom" onClick={handleAddSet}>
+                  <button className="btn btn-custom" onClick={handleAddSet} >
                     Add Set
                   </button>
                 </div>
