@@ -75,6 +75,11 @@ const ExerciseForm = () => {
       <div className="card mt-4">
         <div className="card-body">
           {error && <p className="error-message">{error}</p>}
+          {showAlert && (
+            <div className="alert-overlay">
+              <div className="alert-box alert alert-success">Exercise added successfully!</div>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="row g-3 align-items-center centered-form">
             <div className="col-auto">
               <label htmlFor="muscle" className="visually-hidden">Muscle Group</label>
@@ -107,6 +112,7 @@ const ExerciseForm = () => {
               <button type="submit" className="btn btn-primary my-search-button">Search</button>
             </div>
           </form>
+          <br />
           {!isEmpty && <Link className="btn btn-primary my-search-button" to='/createWorkout'>Go to Workout</Link>}
         </div>
       </div>
