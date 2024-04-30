@@ -1,6 +1,7 @@
 const express = require('express');
 const exerciseController = require('./controllers/exerciseController')
 const workoutController = require('./controllers/workoutController')
+const progressController = require("./controllers/progressController");
 
 
 const router = express.Router();
@@ -16,5 +17,9 @@ router.get('/exercises/:id/lift-history', exerciseController.getExerciseLiftHist
 router.post('/workout', workoutController.createWorkouts);
 router.get('/workout', workoutController.getWorkouts);
 router.get('/workout/:id', workoutController.getWorkoutById);
+
+router.post("/progress", progressController.createProgress);
+router.get("/progress", progressController.getProgresss);
+router.put("/progress", progressController.updateProgress);
 
 module.exports = router;

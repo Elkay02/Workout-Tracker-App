@@ -5,6 +5,7 @@ import Navbar from './components/navbar.tsx';
 import './App.css';
 import Search from './pages/Search.tsx';
 import WorkoutLib from './pages/WorkoutLibrary.tsx';
+import WorkoutProgress from './pages/WorkoutProgress.tsx';
 import OldWorkout from './pages/Workout.tsx';
 import CreateWorkout from './pages/CreateWorkout.tsx';
 
@@ -21,24 +22,36 @@ interface WorkoutContextType {
   workoutList: Exercise[];
   handleExerciseAdded: (newExercise: Exercise) => void;
   setWorkoutList: React.Dispatch<React.SetStateAction<Exercise[]>>;
+  setIsProgress: React.Dispatch<React.SetStateAction<boolean>>;
+  isProgress: Boolean;
 }
 
 const WorkoutContext = createContext<WorkoutContextType>({
   workoutList: [],
-  handleExerciseAdded: () => { },
-  setWorkoutList: () => { }
+  handleExerciseAdded: () => {},
+  setWorkoutList: () => {},
+  setIsProgress: () => {},
+  isProgress: false,
 });
 
 const App = () => {
   const [workoutList, setWorkoutList] = useState<Exercise[]>([]);
-  console.log('App ~ workoutList:', workoutList);
+  const [isProgress, setIsProgress] = useState(false);
 
   const handleExerciseAdded = (newExercise: Exercise) => {
     setWorkoutList([...workoutList, newExercise]);
   };
 
   return (
-    <WorkoutContext.Provider value={{ workoutList, handleExerciseAdded, setWorkoutList }}>
+    <WorkoutContext.Provider
+      value={{
+        workoutList,
+        handleExerciseAdded,
+        setWorkoutList,
+        setIsProgress,
+        isProgress
+      }}
+    >
       <Router>
         <div>
           {/* My navigation bar */}
@@ -49,9 +62,13 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/search" element={<Search />} />
-              <Route path="/createWorkout" element={<CreateWorkout exercises={workoutList} />} />
+              <Route
+                path="/createWorkout"
+                element={<CreateWorkout exercises={workoutList} />}
+              />
               <Route path="/workout/:id" element={<OldWorkout />} />
               <Route path="/workoutLib" element={<WorkoutLib />} />
+              <Route path="/workoutProgress" element={<WorkoutProgress />} />
             </Routes>
           </div>
         </div>

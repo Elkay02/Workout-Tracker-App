@@ -15,7 +15,7 @@ interface Exercise {
 
 const ExerciseForm = () => {
 
-  const { handleExerciseAdded } = useWorkoutContext();
+  const { handleExerciseAdded, isProgress } = useWorkoutContext();
   const [formData, setFormData] = useState({
     muscle: '',
     type: '',
@@ -44,11 +44,14 @@ const ExerciseForm = () => {
       const updatedExercises = [...formData.exercises, { ...exercise, sets: [] }];
       setFormData({ ...formData, exercises: updatedExercises });
       const { data } = await addExercise(exercise);
-      setIsEmpty(false);
       setShowAlert(true);
       setTimeout(() => setShowAlert(false), 2000);
-      console.log('received data', data);
+      if (isProgress) {
+        addProgress(data.name)
+      } else { 
+        setIsEmpty(false);
       handleExerciseAdded(data);
+      }
     } catch (error) {
       console.error('Error adding exercise:', error);
       setError('Failed to add exercise. Please try again.');
@@ -61,6 +64,28 @@ const ExerciseForm = () => {
       [e.target.name]: e.target.value
     });
   };
+
+  const addProgress = async (name: String) => {
+    try {
+        const response = await fetch('http://localhost:3000/progress', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: name
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        console.log(response);
+        
+      } catch (error) {
+        console.error('Error marking workout as done:', error);
+      }
+  }
 
 
   // Manually entered options according to the API list

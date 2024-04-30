@@ -15,6 +15,9 @@ const Navbar = () => {
               <Link className="nav-link" to="/workoutLib">
                 <i className="fas fa-user-circle"></i> Workouts
               </Link>
+              <Link className="nav-link" to="/workoutProgress">
+                <i className="fas fa-user-circle"></i> Progress
+              </Link>
             </div>
           </div>
         </div>
