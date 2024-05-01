@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useWorkoutContext } from "../App";
 import ProgressItem from '../components/ProgressItem';
+import { motion } from "framer-motion"
 
 interface Workout {
   _id: string;
@@ -48,6 +49,24 @@ const WorkoutProgress = () => {
     navigate(`/search`);
   };
 
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.25
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, translateX: -50 },
+    show: {
+      opacity: 1,
+      translateX: 0,
+      transition: { duration: .5, delay: .2 }
+    }
+  };
+
 
   return (
     <div className="container mt-4">
@@ -55,13 +74,14 @@ const WorkoutProgress = () => {
       <div className="card" onClick={handleSearchClick}>
         <h5 className="card-title text-center p-2">Track new workout +</h5>
       </div>
-      <div className="row">
+      <motion.div className="row" variants={containerVariants} initial="hidden" animate="show">
         <h1>Your Workouts</h1>
-        {workoutHistory.length > 0 ? workoutHistory.map((workout: Workout) => (
-
-          <ProgressItem workout={workout} />
+        {workoutHistory.length > 0 ? workoutHistory.map((workout) => (
+          <motion.div key={workout._id} variants={itemVariants}>
+            <ProgressItem workout={workout} />
+          </motion.div>
         )) : <p>No workout history available.</p>}
-      </div>
+      </motion.div>
     </div>
   );
 };

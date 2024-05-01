@@ -43,12 +43,12 @@ const DislpayWorkoutItem = ({ exercise }: Props) => {
         <p className="card-text">Difficulty: {exercise.difficulty}</p>
         <p className="card-text">Instructions: {exercise.instructions}</p>
         {!exercising && (
-          <div>
+          <div className='d-flex flex-column w-50 align-items-center'>
             <h6>Break Time: <span>{exercise.breakTime}</span></h6><h2>Sets:</h2>
             {sets.map((set, index) => (
               <p key={index}>Set: {index + 1}, Weight: {set.weight}, Reps: {set.reps} </p>
             ))}
-            <button onClick={() => { setExercising(true) }}>Start Exercise</button>
+            <button onClick={() => { setExercising(true) }} className='w-25'>Start Exercise</button>
           </div>
         )}
         {exercising && sets[myIndex] && (

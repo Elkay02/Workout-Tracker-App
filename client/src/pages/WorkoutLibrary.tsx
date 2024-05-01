@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { useWorkoutContext } from "../App";
+import { motion } from "framer-motion";
 
 const WorkoutLib = () => {
 
@@ -36,26 +37,45 @@ const WorkoutLib = () => {
       navigate(`/search`);
     };
 
+    const containerVariants = {
+      initial: { opacity: 0 },
+      visible: {
+        opacity: 1,
+        transition: {
+          staggerChildren: 0.3,
+          delayChildren: 0.2 
+        }
+      }
+    };
+  
+    const itemVariants = {
+      initial: { opacity: 0, translateY: -40 },
+      visible: { 
+        opacity: 1, 
+        translateY: 0,
+        transition: { duration: 1 } 
+      }
+    };
+
 
   return (
-    <div className="container mt-4"> {/* Bootstrap container class */}
+    <div className="container mt-4">
       <h1>New Workout</h1>
       <div className="card" onClick={handleSearchClick}>
-
           <h5 className="card-title text-center p-2">Create new workout +</h5>
       </div>
-      <div className="row">
+      <motion.div className="row" variants={containerVariants} initial="initial" animate="visible">
         <h1>Your Workouts</h1>
-        {workouts.map((workout: any) => (
-          <div className="col-md-3 mb-4" key={workout._id}> {/* 4-column grid for medium devices */}
-            <div className="card">
-              <div className="card-body" onClick={() => handleWorkoutClick(workout._id)}>
-                <h5 className="card-title">{workout.name}</h5>
+        {workouts.map((workout) => (
+          <div className="col-md-3 mb-4" key={workout._id}>
+            <motion.div className="card" variants={itemVariants} onClick={() => handleWorkoutClick(workout._id)}>
+              <div className="card-body" >
+                <h5 className="card-title" >{workout.name}</h5>
               </div>
-            </div>
+            </motion.div>
           </div>
         ))}
-      </div>
+      </motion.div>
     </div>
   )
 }

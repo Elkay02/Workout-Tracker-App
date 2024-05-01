@@ -43,18 +43,20 @@ const ProgressItem = ({ workout }: { workout: Workout }) => {
 
 
   return (
-    <div key={workout._id} className="mb-4 text-center card">
-      <h1>{workout.name}</h1>
+    <div key={workout._id} className="p-4 m-2 text-center card">
+      <h2>{workout.name}</h2>
       {workout.history.map((day) => (
         <>
+          <hr/>
           <p>
-            Date:{" "}
+            <b>Date:{" "}</b>
             {day.date
               ? new Date(day.date).toLocaleDateString()
               : "No date"}
           </p>
-          <p>Weight: {day.weight} kg</p>
-          <p>Reps: {day.reps}</p>
+          <p><b>Weight:</b> {day.weight} kg</p>
+          <p><b>Reps:</b> {day.reps}</p>
+
         </>
       ))}
 

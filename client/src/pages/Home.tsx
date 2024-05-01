@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../App.css';
 import carousel1Img1 from '../images/carousel-1-img-1.jpg';
 import carousel2Img1 from '../images/carousel-2-img-1.jpg';
 import carousel3Img1 from '../images/carousel-3-img-1.jpg';
+import { motion } from "framer-motion";
 
 interface CarouselData {
   id: number;
@@ -36,32 +37,69 @@ const quotes = [
   "'You miss one hundred percent of the shots you don't take.' - Wayne Gretzky"
 ];
 
-const getRandomQuote = () => {
+const getRandomQuoteChars = () => {
   const randomIndex = Math.floor(Math.random() * quotes.length);
-  return quotes[randomIndex];
+  return {
+    chars: quotes[randomIndex].split(''),
+    key: Math.random()
+  };
 };
 
+
 const Home = () => {
+
+  const [quoteData, setQuoteData] = useState(getRandomQuoteChars());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setQuoteData(getRandomQuoteChars());
+    }, 10000); 
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="welcome-message">
-      <h1>Welcome to Workout Hub</h1>
-      <p>Your personal guide to fitness and workouts.</p>
+      <motion.h1
+        initial={{ opacity: 0, translateY: -15 }} 
+        animate={{ opacity: 1, translateY: 0 }}
+        transition={{ duration: .5 }}
+      >Welcome to Workout Hub</motion.h1>
+      <h4>Your personal guide to fitness and workouts.</h4>
       <div className="image-grid-container">
         {carouselsData.map((item) => (
-          <div key={item.id} className="individual-image-container">
-            <img
+          <motion.div 
+            key={item.id} 
+            className="individual-image-container" 
+            initial={{ opacity: 0, translateX: -50 }} 
+            animate={{ opacity: 1, translateX: 0 }}
+            transition={{ duration: 1.5, staggerChildren: 0.25 }}
+            >
+            <motion.img
               className="d-block w-100"
               src={item.imgSrc}
               alt={`Image ${item.id}`}
+              initial={{ opacity: 0, translateX: -50 }} 
+              animate={{ opacity: 1, translateX: 0 }}
+              transition={{ duration: 1.5, staggerChildren: 0.25 }}
             />
-            <div className="image-caption">
-              <h3>{item.captionTitle}</h3>
-            </div>
-          </div>
+            <motion.div className="image-caption">
+              <motion.h3>{item.captionTitle}</motion.h3>
+            </motion.div>
+          </motion.div>
         ))}
       </div>
       <div className="quote-container">
-        <p>"{getRandomQuote()}"</p>
+      {quoteData.chars.map((char, index) => (
+          <motion.span
+            key={`${quoteData.key}-${index}`} // Include the unique key in the key prop
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05, type: "spring", stiffness: 120 }}
+          >
+            {char}
+          </motion.span>
+        ))}
       </div>
     </div>
   );
