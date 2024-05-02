@@ -85,7 +85,7 @@ const WorkoutList = ({ exercises, isOld }: Props) => {
         </React.Fragment>
       ))}
       {!isOld && <div className="d-grid gap-2">
-        <button onClick={handleWorkoutDone} className="btn mt-2">
+        <button onClick={handleWorkoutDone} className="btn mt-2" role='workoutline'>
           Submit Workout
         </button>
       </div>}

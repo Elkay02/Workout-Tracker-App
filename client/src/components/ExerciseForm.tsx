@@ -48,9 +48,9 @@ const ExerciseForm = () => {
       setTimeout(() => setShowAlert(false), 2000);
       if (isProgress) {
         addProgress(data.name)
-      } else { 
+      } else {
         setIsEmpty(false);
-      handleExerciseAdded(data);
+        handleExerciseAdded(data);
       }
     } catch (error) {
       console.error('Error adding exercise:', error);
@@ -67,24 +67,24 @@ const ExerciseForm = () => {
 
   const addProgress = async (name: String) => {
     try {
-        const response = await fetch('http://localhost:3000/progress', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            name: name
-          })
-        });
+      const response = await fetch('http://localhost:3000/progress', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: name
+        })
+      });
 
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        console.log(response);
-        
-      } catch (error) {
-        console.error('Error marking workout as done:', error);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
+      console.log(response);
+
+    } catch (error) {
+      console.error('Error marking workout as done:', error);
+    }
   }
 
 
@@ -151,7 +151,7 @@ const ExerciseForm = () => {
                 <p className="exercise-muscle">Muscle: {exercise.muscle}</p>
                 <p className="exercise-difficulty">Difficulty: {exercise.difficulty}</p>
                 <p className="exercise-instructions">{exercise.instructions}</p>
-                <button onClick={() => handleAddExercise(exercise)} className="btn btn-primary my-add-exercise-button">Add Exercise</button>
+                <button onClick={() => handleAddExercise(exercise)} className="btn btn-primary my-add-exercise-button" role='addbutton'>Add Exercise</button>
               </li>
             ))}
           </ul>
